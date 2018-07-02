@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    SecIT\ElasticFormBundle\:
+        resource: '../../*'
+        exclude: '../../{DependencyInjection,Entity,Form,Resources,Tests,Translations}'
