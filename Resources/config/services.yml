@@ -10,3 +10,6 @@ services:
     SecIT\EntityTranslationBundle\EventSubscriber\TranslatableSubscriber:
         tags:
             - { name: doctrine.event_subscriber, connection: default }
+
+    SecIT\EntityTranslationBundle\Form\Type\ResourceTranslationsType:
+        public: true
