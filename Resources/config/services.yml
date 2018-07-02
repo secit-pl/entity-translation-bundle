@@ -1,9 +1,4 @@
 services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-        public: false
-
-    SecIT\EntityTranslationBundle\:
-        resource: '../../*'
-        exclude: '../../{DependencyInjection,Entity,Form,Resources,Tests,Translations}'
+    SecIT\EntityTranslationBundle\EventSubscriber\TranslatableSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }

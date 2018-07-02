@@ -29,7 +29,7 @@ abstract class AbstractTranslation implements TranslationInterface
      *
      * @var null|TranslatableInterface
      *
-     * @see \SecIT\EntityTranslationBundle\EventListener\TranslatableSubscriber
+     * @see \SecIT\EntityTranslationBundle\EventSubscriber\TranslatableSubscriber
      */
     protected $translatable;
 

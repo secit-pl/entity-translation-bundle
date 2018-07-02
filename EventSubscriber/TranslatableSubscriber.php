@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SecIT\EntityTranslationBundle\EventListener;
+namespace SecIT\EntityTranslationBundle\EventSubscriber;
 
 use SecIT\EntityTranslationBundle\Translations\TranslatableInterface;
 use SecIT\EntityTranslationBundle\Translations\TranslationInterface;

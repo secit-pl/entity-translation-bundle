@@ -20,7 +20,7 @@ trait TranslatableTrait
      *
      * @var ArrayCollection|PersistentCollection|TranslationInterface[]
      *
-     * @see \SecIT\EntityTranslationBundle\EventListener\TranslatableSubscriber
+     * @see \SecIT\EntityTranslationBundle\EventSubscriber\TranslatableSubscriber
      */
     protected $translations;
 
