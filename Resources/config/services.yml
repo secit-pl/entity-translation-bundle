@@ -4,6 +4,6 @@ services:
         autoconfigure: true
         public: false
 
-    SecIT\ElasticFormBundle\:
+    SecIT\EntityTranslationBundle\:
         resource: '../../*'
         exclude: '../../{DependencyInjection,Entity,Form,Resources,Tests,Translations}'
