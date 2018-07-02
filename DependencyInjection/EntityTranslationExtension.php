@@ -10,11 +10,11 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
 /**
- * Class ImapExtension.
+ * Class EntityTranslationExtension.
  *
  * @author Tomasz Gemza
  */
-class ImapExtension extends Extension
+class EntityTranslationExtension extends Extension
 {
     /**
      * {@inheritdoc}
