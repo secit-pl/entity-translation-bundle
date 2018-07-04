@@ -79,7 +79,21 @@ final class ResourceTranslationsType extends AbstractType
             'constraints' => [
                 new Valid(),
             ],
-        ]);
+        ])
+        ->setNormalizer('entry_options', function ($options, $additionalValues) {
+            return function (string $localeCode) use ($additionalValues): array {
+                $entryOptions = [
+                    'required' => $localeCode === $this->defaultLocaleCode,
+                    'label' => Intl::getLocaleBundle()->getLocaleName($localeCode),
+                ];
+
+                if (is_array($additionalValues)) {
+                    return array_merge($entryOptions, $additionalValues);
+                }
+
+                return $entryOptions;
+            };
+        });
     }
 
     /**
