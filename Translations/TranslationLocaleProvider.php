@@ -35,7 +35,7 @@ class TranslationLocaleProvider
      */
     public function getDefinedLocalesCodes(): array
     {
-        return $this->container->getParameter('allowed_locales');
+        return $this->container->getParameter('secit.entity_translation.locales.defined');
     }
 
     /**
@@ -45,6 +45,6 @@ class TranslationLocaleProvider
      */
     public function getDefaultLocaleCode(): string
     {
-        return $this->container->getParameter('kernel.default_locale');
+        return $this->container->getParameter('secit.entity_translation.locales.default');
     }
 }
