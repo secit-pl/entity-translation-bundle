@@ -7,6 +7,7 @@ namespace SecIT\EntityTranslationBundle\Form\Type;
 use SecIT\EntityTranslationBundle\Translations\TranslationInterface;
 use SecIT\EntityTranslationBundle\Translations\TranslationLocaleProvider;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -27,12 +28,18 @@ final class ResourceTranslationsType extends AbstractType
     private $defaultLocaleCode;
 
     /**
+     * @var bool
+     */
+    private $renderAsCollection = true;
+
+    /**
      * @param TranslationLocaleProvider $localeProvider
      */
     public function __construct(TranslationLocaleProvider $localeProvider)
     {
         $this->definedLocalesCodes = $localeProvider->getDefinedLocalesCodes();
         $this->defaultLocaleCode = $localeProvider->getDefaultLocaleCode();
+        $this->renderAsCollection = $localeProvider->hasMultipleLocalesCodes();
     }
 
     /**
@@ -40,6 +47,17 @@ final class ResourceTranslationsType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        if (!$this->renderAsCollection) {
+            $entryOptions = $options['entry_options']($this->defaultLocaleCode);
+            if (!isset($entryOptions['constraints'])) {
+                $entryOptions['constraints'] = [];
+            }
+            $entryOptions['constraints'][] = new Valid();
+            $entryOptions['label'] = false;
+
+            $builder->add($this->defaultLocaleCode, $options['entry_type'], $entryOptions);
+        }
+
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
             /** @var TranslationInterface[] $translations */
             $translations = $event->getData();
@@ -65,35 +83,41 @@ final class ResourceTranslationsType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'entries' => $this->definedLocalesCodes,
-            'entry_name' => function (string $localeCode): string {
-                return $localeCode;
-            },
-            'entry_options' => function (string $localeCode): array {
-                return [
-                    'required' => $localeCode === $this->defaultLocaleCode,
-                    'label' => Intl::getLocaleBundle()->getLocaleName($localeCode),
-                ];
-            },
-            'constraints' => [
-                new Valid(),
-            ],
-        ])
-        ->setNormalizer('entry_options', function ($options, $additionalValues) {
-            return function (string $localeCode) use ($additionalValues): array {
-                $entryOptions = [
-                    'required' => $localeCode === $this->defaultLocaleCode,
-                    'label' => Intl::getLocaleBundle()->getLocaleName($localeCode),
-                ];
+        if ($this->renderAsCollection) {
+            $resolver->setDefaults([
+                'entries' => $this->definedLocalesCodes,
+                'entry_name' => function (string $localeCode): string {
+                    return $localeCode;
+                },
+                'constraints' => [
+                    new Valid(),
+                ],
+            ])
+            ->setNormalizer('entry_options', function ($options, $additionalValues) {
+                return function (string $localeCode) use ($additionalValues): array {
+                    $entryOptions = [
+                        'required' => $localeCode === $this->defaultLocaleCode,
+                        'label' => Intl::getLocaleBundle()->getLocaleName($localeCode),
+                    ];
 
-                if (is_array($additionalValues)) {
-                    return array_merge($entryOptions, $additionalValues);
-                }
+                    if (is_array($additionalValues)) {
+                        return array_merge($entryOptions, $additionalValues);
+                    }
 
-                return $entryOptions;
-            };
-        });
+                    return $entryOptions;
+                };
+            });
+        } else {
+            $resolver->setDefault('entry_type', null);
+            $resolver->isRequired('entry_type');
+            $resolver->setAllowedTypes('entry_type', 'string');
+
+            $resolver->setDefault('entry_options', function () {
+                return [];
+            });
+            $resolver->setAllowedTypes('entry_options', ['array', 'callable']);
+            $resolver->setNormalizer('entry_options', FixedCollectionType::optionalCallableNormalizer());
+        }
     }
 
     /**
@@ -101,7 +125,11 @@ final class ResourceTranslationsType extends AbstractType
      */
     public function getParent(): string
     {
-        return FixedCollectionType::class;
+        if ($this->renderAsCollection) {
+            return FixedCollectionType::class;
+        }
+
+        return FormType::class;
     }
 
     /**

@@ -39,12 +39,22 @@ class TranslationLocaleProvider
     }
 
     /**
-     * get default locale code.
+     * Get default locale code.
      *
      * @return string
      */
     public function getDefaultLocaleCode(): string
     {
         return $this->container->getParameter('secit.entity_translation.locales.default');
+    }
+
+    /**
+     * Has multiple locales codes?
+     *
+     * @return string
+     */
+    public function hasMultipleLocalesCodes(): bool
+    {
+        return count($this->getDefinedLocalesCodes()) > 1;
     }
 }
