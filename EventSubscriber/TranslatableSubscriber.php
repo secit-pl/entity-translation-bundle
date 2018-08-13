@@ -88,7 +88,7 @@ class TranslatableSubscriber implements EventSubscriber
     {
         $entity = $args->getEntity();
         if ($entity instanceof TranslatableInterface) {
-            $entity->setCurrentLocale($this->translationLocaleProvider->getDefaultLocaleCode());
+            $entity->setCurrentLocale($this->translationLocaleProvider->getCurrentRequestLocale());
             $entity->setFallbackLocale($this->translationLocaleProvider->getDefaultLocaleCode());
         }
     }
