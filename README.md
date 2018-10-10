@@ -25,7 +25,7 @@ entity_translation:
           - pl
           - en_GB
           
-        default: '%kernel.default_locale%' # in this exampel equals `pl`
+        default: '%kernel.default_locale%' # in this example equals `pl`
 
 ```
 
