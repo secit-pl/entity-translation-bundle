@@ -55,9 +55,12 @@ class TranslationLocaleProvider
      */
     public function getCurrentRequestLocale(): string
     {
-        $locale = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
-        if (in_array($locale, $this->getDefinedLocalesCodes())) {
-            return $locale;
+        $currentRequest = $this->container->get('request_stack')->getCurrentRequest();
+        if ($currentRequest) {
+            $locale = $currentRequest->getLocale();
+            if (in_array($locale, $this->getDefinedLocalesCodes())) {
+                return $locale;
+            }
         }
 
         return $this->getDefaultLocaleCode();
