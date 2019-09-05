@@ -69,7 +69,7 @@ class TranslationLocaleProvider
     /**
      * Has multiple locales codes?
      *
-     * @return string
+     * @return bool
      */
     public function hasMultipleLocalesCodes(): bool
     {
