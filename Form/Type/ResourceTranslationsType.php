@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Intl\Intl;
+use Symfony\Component\Intl\Locales;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Valid;
 
@@ -97,7 +98,7 @@ final class ResourceTranslationsType extends AbstractType
                 return function (string $localeCode) use ($additionalValues): array {
                     $entryOptions = [
                         'required' => $localeCode === $this->defaultLocaleCode,
-                        'label' => Intl::getLocaleBundle()->getLocaleName($localeCode),
+                        'label' => Locales::getName($localeCode),
                     ];
 
                     if (is_array($additionalValues)) {
