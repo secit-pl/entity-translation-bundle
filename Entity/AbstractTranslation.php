@@ -22,7 +22,7 @@ abstract class AbstractTranslation implements TranslationInterface
      *
      * @ORM\Column(type="string", length=8)
      */
-    private $locale;
+    protected $locale;
 
     /**
      * Dynamically mapped in TranslatableSubscriber.
