@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SecIT\EntityTranslationBundle\Translations;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class TranslationLocaleProvider.
@@ -13,19 +15,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class TranslationLocaleProvider
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private ParameterBagInterface $parameterBag;
+    private RequestStack $requestStack;
 
     /**
      * TranslationLocaleProvider constructor.
      *
-     * @param ContainerInterface $container
+     * @param ParameterBagInterface $parameterBag
+     * @param RequestStack $requestStack
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ParameterBagInterface $parameterBag, RequestStack $requestStack)
     {
-        $this->container = $container;
+        $this->parameterBag = $parameterBag;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -35,7 +37,7 @@ class TranslationLocaleProvider
      */
     public function getDefinedLocalesCodes(): array
     {
-        return $this->container->getParameter('secit.entity_translation.locales.defined');
+        return $this->parameterBag->getParameter('secit.entity_translation.locales.defined');
     }
 
     /**
@@ -45,7 +47,7 @@ class TranslationLocaleProvider
      */
     public function getDefaultLocaleCode(): string
     {
-        return $this->container->getParameter('secit.entity_translation.locales.default');
+        return $this->parameterBag->getParameter('secit.entity_translation.locales.default');
     }
 
     /**
@@ -55,7 +57,7 @@ class TranslationLocaleProvider
      */
     public function getCurrentRequestLocale(): string
     {
-        $currentRequest = $this->container->get('request_stack')->getCurrentRequest();
+        $currentRequest = $this->requestStack->getCurrentRequest();
         if ($currentRequest) {
             $locale = $currentRequest->getLocale();
             if (in_array($locale, $this->getDefinedLocalesCodes())) {
