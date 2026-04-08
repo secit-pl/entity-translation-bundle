@@ -1,6 +1,6 @@
 # Entity Translation Bundle
 
-Doctrine entity translations Symfony 4.x.
+Doctrine entity translations Symfony 4.x+.
 
 ## Installation
 
