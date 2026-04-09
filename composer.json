@@ -1,7 +1,7 @@
 {
     "name": "secit-pl/entity-translation-bundle",
     "type": "symfony-bundle",
-    "description": "Doctrine entity translations Symfony 4.x+.",
+    "description": "Doctrine entity translations for Symfony.",
     "keywords": ["symfony", "doctrine", "translation", "entity translation"],
     "homepage": "http://secit.pl",
     "license": "MIT",
@@ -12,15 +12,15 @@
         }
     ],
     "require": {
-        "php": ">=7.1.0",
-        "symfony/config": "^4.4 || ^5.0 || ^6.0 || ^7.0",
-        "symfony/dependency-injection": "^4.4 || ^5.0 || ^6.0 || ^7.0",
-        "symfony/form": "^4.4 || ^5.0 || ^6.0 || ^7.0",
-        "symfony/framework-bundle": "^4.4 || ^5.0 || ^6.0 || ^7.0",
-        "symfony/http-kernel": "^4.4 || ^5.0 || ^6.0 || ^7.0",
-        "symfony/intl": "^4.4 || ^5.0 || ^6.0 || ^7.0",
-        "symfony/options-resolver": "^4.4 || ^5.0 || ^6.0 || ^7.0",
-        "symfony/validator": "^4.4 || ^5.0 || ^6.0 || ^7.0",
+        "php": ">=8.1.0",
+        "symfony/config": "^7.0 || ^8.0",
+        "symfony/dependency-injection": "^7.0 || ^8.0",
+        "symfony/form": "^7.0 || ^8.0",
+        "symfony/framework-bundle": "^7.0 || ^8.0",
+        "symfony/http-kernel": "^7.0 || ^8.0",
+        "symfony/intl": "^7.0 || ^8.0",
+        "symfony/options-resolver": "^7.0 || ^8.0",
+        "symfony/validator": "^7.0 || ^8.0",
         "doctrine/doctrine-bundle": "^2.3",
         "doctrine/orm": "^2.9"
     },

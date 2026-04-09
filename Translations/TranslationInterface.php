@@ -20,22 +20,16 @@ interface TranslationInterface
 
     /**
      * Set translatable element.
-     *
-     * @param TranslatableInterface|null $translatable
      */
     public function setTranslatable(?TranslatableInterface $translatable): void;
 
     /**
      * Get locale.
-     *
-     * @return string|null
      */
     public function getLocale(): ?string;
 
     /**
      * Set locale.
-     *
-     * @param string|null $locale
      */
     public function setLocale(?string $locale): void;
 }

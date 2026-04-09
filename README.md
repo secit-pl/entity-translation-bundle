@@ -1,6 +1,14 @@
 # Entity Translation Bundle
 
-Doctrine entity translations Symfony 4.x+.
+Doctrine entity translations for Symfony.
+
+## Compatibility matrix
+
+
+| Bundle version | Maintained | Symfony versions | Min. PHP version |
+|----------------|------------|------------------|------------------|
+| 2.x            | Yes        | 7.0 to 8.x       | 8.1.0            |
+| 1.6            | No         | 4.0 to 6.4       | 7.1.0            |
 
 ## Installation
 
@@ -40,7 +48,7 @@ entity_translation:
 
 ###### Example
 
-Let's say we have following entity and we want to translate the `name` and `description` fields.
+Let's say we have the following entity, and we want to translate the `name` and `description` fields.
 Other field should not be translated.
 
 ./src/Entity/Shop.php
@@ -54,159 +62,74 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class Shop.
- *
- * @ORM\Table(name="shops")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'shops')]
 class Shop
 {
-    /**
-     * @var int|null
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string")
-     *
-     * @JMS\Expose
-     */
-    private $name;
+    #[ORM\Column]
+    private ?string $name = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string")
-     *
-     * @JMS\Expose
-     */
-    private $description;
+    #[ORM\Column]
+    private ?string $description = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string")
-     *
-     * @JMS\Expose
-     */
-    private $city;
+    #[ORM\Column]
+    private ?string $city = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string")
-     *
-     * @JMS\Expose
-     */
-    private $street;
+    #[ORM\Column]
+    private ?string $street = null;
 
-    /**
-     * Get id.
-     *
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Get name.
-     *
-     * @return null|string
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * Set name.
-     *
-     * @param null|string $name
-     *
-     * @return Shop
-     */
-    public function setName(?string $name): Shop
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * Get description.
-     *
-     * @return null|string
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * Set description.
-     *
-     * @param null|string $description
-     *
-     * @return Shop
-     */
-    public function setDescription(?string $description): Shop
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * Get city.
-     * 
-     * @return null|string
-     */
     public function getCity(): ?string
     {
         return $this->city;
     }
 
-    /**
-     * Set city.
-     * 
-     * @param null|string $city
-     *
-     * @return Shop
-     */
-    public function setCity(?string $city): Shop
+    public function setCity(?string $city): self
     {
         $this->city = $city;
 
         return $this;
     }
 
-    /**
-     * Get street.
-     * 
-     * @return null|string
-     */
     public function getStreet(): ?string
     {
         return $this->street;
     }
 
-    /**
-     * Set street.
-     * 
-     * @param null|string $street
-     *
-     * @return Shop
-     */
-    public function setStreet(?string $street): Shop
+    public function setStreet(?string $street): self
     {
         $this->street = $street;
 
@@ -216,7 +139,7 @@ class Shop
 
 ```
 
-We need to split the file to two separeted files. One will contain the common part of each translation and one will contain the fields we want to translate.
+We need to split the file to two separated files. One will contain the common part of each translation and one will contain the fields we want to translate.
 
 First we need to create a Shop Translation entity. The entity should be placed in namespace `App\Entity\Shop`.  
 
@@ -234,94 +157,46 @@ use Doctrine\ORM\Mapping as ORM;
 use SecIT\EntityTranslationBundle\Entity\AbstractTranslation;
 
 /**
- * Class Translation.
- *
- * @ORM\Table(name="shops_translations")
- * @ORM\Entity
- *
  * @method Shop getTranslatable()
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'shops_translations')]
 class Translation extends AbstractTranslation
 {
-    /**
-     * @var int|null
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string")
-     *
-     * @JMS\Expose
-     */
-    private $name;
+    #[ORM\Column]
+    private ?string $name = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string")
-     *
-     * @JMS\Expose
-     */
-    private $description;
+    #[ORM\Column]
+    private ?string $description = null;
 
-    /**
-     * Get id.
-     *
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Get name.
-     *
-     * @return null|string
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * Set name.
-     *
-     * @param null|string $name
-     *
-     * @return Translation
-     */
-    public function setName(?string $name): Translation
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * Get description.
-     *
-     * @return null|string
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * Set description.
-     *
-     * @param null|string $description
-     *
-     * @return Translation
-     */
-    public function setDescription(?string $description): Translation
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -354,131 +229,66 @@ use SecIT\EntityTranslationBundle\Translations\TranslatableInterface;
 use SecIT\EntityTranslationBundle\Translations\TranslatableTrait;
 
 /**
- * Class Shop.
- *
- * @ORM\Table(name="shops")
- * @ORM\Entity
- *
  * @method Translation getTranslation(?string $locale)
  * @method Collection|Translation[] getTranslations
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'shops')]
 class Shop implements TranslatableInterface
 {
     use TranslatableTrait  {
         __construct as private initializeTranslationsCollection;
     }
     
-    /**
-     * @var int|null
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string")
-     *
-     * @JMS\Expose
-     */
-    private $city;
+    #[ORM\Column]
+    private ?string $city = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string")
-     *
-     * @JMS\Expose
-     */
-    private $street;
+    #[ORM\Column]
+    private ?string $street = null;
 
-    /**
-     * Shop constructor.
-     */
     public function __construct()
     {
         $this->initializeTranslationsCollection();
     }
-    
-    /**
-     * Get id.
-     *
-     * @return int|null
-     */
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Get name.
-     *
-     * @param null|string locale
-     *
-     * @return null|string
-     */
     public function getName(?string $locale = null): ?string
     {
         return $this->getTranslation($locale)->getName();
     }
 
-    /**
-     * Get description.
-     *
-     * @param null|string locale
-     *
-     * @return null|string
-     */
     public function getDescription(?string $locale = null): ?string
     {
         return $this->getTranslation($locale)->getDescription();
     }
 
-    /**
-     * Get city.
-     * 
-     * @return null|string
-     */
     public function getCity(): ?string
     {
         return $this->city;
     }
 
-    /**
-     * Set city.
-     * 
-     * @param null|string $city
-     *
-     * @return Shop
-     */
-    public function setCity(?string $city): Shop
+    public function setCity(?string $city): self
     {
         $this->city = $city;
 
         return $this;
     }
 
-    /**
-     * Get street.
-     * 
-     * @return null|string
-     */
     public function getStreet(): ?string
     {
         return $this->street;
     }
 
-    /**
-     * Set street.
-     * 
-     * @param null|string $street
-     *
-     * @return Shop
-     */
-    public function setStreet(?string $street): Shop
+    public function setStreet(?string $street): self
     {
         $this->street = $street;
 
@@ -510,12 +320,12 @@ $shop = new Shop();
 $shop->setCity('city')
     ->setStreet('some street 1');
 
-// adding polish translation
+// adding Polish translation
 $shop->getTranslation('pl')
     ->setName('Nazwa')
     ->setDescription('Opis...');
 
-// adding english translation
+// adding English translation
 $shop->getTranslation('en_GB')
     ->setName('Name')
     ->setDescription('Description...');
@@ -557,14 +367,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class ShopType.
- */
 class ShopType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -576,9 +380,6 @@ class ShopType extends AbstractType
             ->add('save', SubmitType::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -604,14 +405,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class TranslationType.
- */
 class TranslationType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -619,9 +414,6 @@ class TranslationType extends AbstractType
             ->add('description');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

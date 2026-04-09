@@ -22,26 +22,20 @@ trait TranslatableTrait
      *
      * @see \SecIT\EntityTranslationBundle\EventSubscriber\TranslatableSubscriber
      */
-    protected $translations;
+    protected ArrayCollection $translations;
 
     /**
      * @var array|TranslationInterface[]
      */
-    protected $translationsCache = [];
+    protected array $translationsCache = [];
+
+    protected ?string $currentLocale = null;
 
     /**
      * @var string|null
      */
-    protected $currentLocale;
+    protected ?string $fallbackLocale = null;
 
-    /**
-     * @var string|null
-     */
-    protected $fallbackLocale;
-
-    /**
-     * TranslatableTrait constructor.
-     */
     public function __construct()
     {
         $this->translations = new ArrayCollection();
@@ -49,8 +43,6 @@ trait TranslatableTrait
 
     /**
      * Get translations.
-     *
-     * @return Collection|TranslationInterface[]
      */
     public function getTranslations(): Collection
     {
@@ -59,10 +51,6 @@ trait TranslatableTrait
 
     /**
      * Get translation.
-     *
-     * @param string|null $locale
-     *
-     * @return TranslationInterface
      */
     public function getTranslation(?string $locale = null): TranslationInterface
     {
@@ -107,10 +95,6 @@ trait TranslatableTrait
 
     /**
      * Check if translatable element has translation.
-     *
-     * @param TranslationInterface $translation
-     *
-     * @return bool
      */
     public function hasTranslation(TranslationInterface $translation): bool
     {
@@ -119,8 +103,6 @@ trait TranslatableTrait
 
     /**
      * Add translation.
-     *
-     * @param TranslationInterface $translation
      */
     public function addTranslation(TranslationInterface $translation): void
     {
@@ -134,8 +116,6 @@ trait TranslatableTrait
 
     /**
      * Remove translation.
-     *
-     * @param TranslationInterface $translation
      */
     public function removeTranslation(TranslationInterface $translation): void
     {
@@ -148,8 +128,6 @@ trait TranslatableTrait
 
     /**
      * Set current locale.
-     *
-     * @param string $currentLocale
      */
     public function setCurrentLocale(string $currentLocale): void
     {
@@ -158,8 +136,6 @@ trait TranslatableTrait
 
     /**
      * Get fallback locale.
-     *
-     * @return string|null
      */
     public function getFallbackLocale(): ?string
     {
@@ -168,8 +144,6 @@ trait TranslatableTrait
 
     /**
      * Set fallback locale.
-     *
-     * @param string $fallbackLocale
      */
     public function setFallbackLocale(string $fallbackLocale): void
     {
@@ -178,8 +152,6 @@ trait TranslatableTrait
 
     /**
      * Create resource translation model.
-     *
-     * @return TranslationInterface
      */
     protected function createTranslation(): TranslationInterface
     {

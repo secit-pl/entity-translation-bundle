@@ -14,21 +14,10 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('entity_translation');
-
-        if (\method_exists($treeBuilder, 'getRootNode')) {
-            $rootNode = $treeBuilder->getRootNode();
-        } else {
-            // BC layer for symfony/config 4.1 and older
-            $rootNode = $treeBuilder->root('entity_translation');
-        }
-
-        $rootNode
+        return (new TreeBuilder('entity_translation'))
+            ->getRootNode()
             ->children()
                 ->arrayNode('locales')
                     ->children()
@@ -45,7 +34,5 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
         ;
-
-        return $treeBuilder;
     }
 }

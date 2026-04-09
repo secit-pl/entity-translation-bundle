@@ -11,7 +11,6 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Intl\Intl;
 use Symfony\Component\Intl\Locales;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Valid;
@@ -21,21 +20,10 @@ final class ResourceTranslationsType extends AbstractType
     /**
      * @var string[]
      */
-    private $definedLocalesCodes;
+    private array $definedLocalesCodes;
+    private string $defaultLocaleCode;
+    private bool $renderAsCollection;
 
-    /**
-     * @var string
-     */
-    private $defaultLocaleCode;
-
-    /**
-     * @var bool
-     */
-    private $renderAsCollection = true;
-
-    /**
-     * @param TranslationLocaleProvider $localeProvider
-     */
     public function __construct(TranslationLocaleProvider $localeProvider)
     {
         $this->definedLocalesCodes = $localeProvider->getDefinedLocalesCodes();
@@ -43,9 +31,6 @@ final class ResourceTranslationsType extends AbstractType
         $this->renderAsCollection = $localeProvider->hasMultipleLocalesCodes();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if (!$this->renderAsCollection) {
@@ -79,9 +64,6 @@ final class ResourceTranslationsType extends AbstractType
         });
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         if ($this->renderAsCollection) {
@@ -121,9 +103,6 @@ final class ResourceTranslationsType extends AbstractType
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParent(): string
     {
         if ($this->renderAsCollection) {
@@ -133,9 +112,6 @@ final class ResourceTranslationsType extends AbstractType
         return FormType::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix(): string
     {
         return 'resource_translations';

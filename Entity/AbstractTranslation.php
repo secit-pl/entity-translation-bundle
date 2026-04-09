@@ -12,38 +12,25 @@ use Doctrine\ORM\Mapping as ORM;
  * Class AbstractTranslation.
  *
  * @author Tomasz Gemza
- *
- * @ORM\MappedSuperclass()
  */
+#[ORM\MappedSuperclass]
 abstract class AbstractTranslation implements TranslationInterface
 {
-    /**
-     * @var null|string
-     *
-     * @ORM\Column(type="string", length=8)
-     */
-    protected $locale;
+    #[ORM\Column(type: 'string', length: 8)]
+    protected ?string $locale = null;
 
     /**
      * Dynamically mapped in TranslatableSubscriber.
      *
-     * @var null|TranslatableInterface
-     *
      * @see \SecIT\EntityTranslationBundle\EventSubscriber\TranslatableSubscriber
      */
-    protected $translatable;
+    protected ?TranslatableInterface $translatable = null;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTranslatable(): TranslatableInterface
     {
         return $this->translatable;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setTranslatable(?TranslatableInterface $translatable): void
     {
         if ($translatable === $this->translatable) {
@@ -52,26 +39,16 @@ abstract class AbstractTranslation implements TranslationInterface
 
         $previousTranslatable = $this->translatable;
         $this->translatable = $translatable;
-        if (null !== $previousTranslatable) {
-            $previousTranslatable->removeTranslation($this);
-        }
 
-        if (null !== $translatable) {
-            $translatable->addTranslation($this);
-        }
+        $previousTranslatable?->removeTranslation($this);
+        $translatable?->addTranslation($this);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLocale(): ?string
     {
         return $this->locale;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setLocale(?string $locale): void
     {
         $this->locale = $locale;

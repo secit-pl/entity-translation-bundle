@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace SecIT\EntityTranslationBundle\EventSubscriber;
 
+use Doctrine\ORM\Event\PostLoadEventArgs;
+use Doctrine\ORM\Event\PrePersistEventArgs;
 use SecIT\EntityTranslationBundle\Translations\TranslatableInterface;
 use SecIT\EntityTranslationBundle\Translations\TranslationInterface;
 use SecIT\EntityTranslationBundle\Translations\TranslationLocaleProvider;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -27,24 +28,11 @@ class TranslatableSubscriber implements EventSubscriber
 {
     private const TRANSLATABLE_ENTITY_CLASS_NAME = 'Translation';
 
-    /**
-     * @var TranslationLocaleProvider
-     */
-    private $translationLocaleProvider;
-
-    /**
-     * TranslatableSubscriber constructor.
-     *
-     * @param TranslationLocaleProvider $translationLocaleProvider
-     */
-    public function __construct(TranslationLocaleProvider $translationLocaleProvider)
-    {
-        $this->translationLocaleProvider = $translationLocaleProvider;
+    public function __construct(
+        private readonly TranslationLocaleProvider $translationLocaleProvider,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSubscribedEvents()
     {
         return [
@@ -56,8 +44,6 @@ class TranslatableSubscriber implements EventSubscriber
 
     /**
      * Add mapping to translatable entities.
-     *
-     * @param LoadClassMetadataEventArgs $eventArgs
      *
      * @throws \InvalidArgumentException
      * @throws \Exception
@@ -80,13 +66,27 @@ class TranslatableSubscriber implements EventSubscriber
     }
 
     /**
-     * Post load.
-     *
-     * @param LifecycleEventArgs $args
+     * Post load event handling.
      */
-    public function postLoad(LifecycleEventArgs $args): void
+    public function postLoad(PostLoadEventArgs $args): void
     {
-        $entity = $args->getEntity();
+        $this->processEvent($args);
+    }
+
+    /**
+     * Pre persist event handling.
+     */
+    public function prePersist(PrePersistEventArgs $args): void
+    {
+        $this->processEvent($args);
+    }
+
+    /**
+     * Events handling logic is common for both post load and pre persist events.
+     */
+    private function processEvent(PostLoadEventArgs|PrePersistEventArgs $args): void
+    {
+        $entity = $args->getObject();
         if ($entity instanceof TranslatableInterface) {
             $entity->setCurrentLocale($this->translationLocaleProvider->getCurrentRequestLocale());
             $entity->setFallbackLocale($this->translationLocaleProvider->getDefaultLocaleCode());
@@ -94,19 +94,7 @@ class TranslatableSubscriber implements EventSubscriber
     }
 
     /**
-     * Pre persist.
-     *
-     * @param LifecycleEventArgs $args
-     */
-    public function prePersist(LifecycleEventArgs $args): void
-    {
-        $this->postLoad($args);
-    }
-
-    /**
      * Add mapping data to a translatable entity.
-     *
-     * @param ClassMetadata $metadata
      */
     private function mapTranslatable(ClassMetadata $metadata): void
     {
@@ -125,8 +113,6 @@ class TranslatableSubscriber implements EventSubscriber
 
     /**
      * Add mapping data to a translation entity.
-     *
-     * @param ClassMetadata $metadata
      *
      * @throws \InvalidArgumentException
      * @throws \Exception
@@ -174,11 +160,6 @@ class TranslatableSubscriber implements EventSubscriber
 
     /**
      * Check if a unique constraint has been defined.
-     *
-     * @param ClassMetadata $metadata
-     * @param array         $columns
-     *
-     * @return bool
      */
     private function hasUniqueConstraint(ClassMetadata $metadata, array $columns): bool
     {

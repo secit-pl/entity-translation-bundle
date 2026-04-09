@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SecIT\EntityTranslationBundle\Translations;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -15,25 +14,14 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class TranslationLocaleProvider
 {
-    private ParameterBagInterface $parameterBag;
-    private RequestStack $requestStack;
-
-    /**
-     * TranslationLocaleProvider constructor.
-     *
-     * @param ParameterBagInterface $parameterBag
-     * @param RequestStack $requestStack
-     */
-    public function __construct(ParameterBagInterface $parameterBag, RequestStack $requestStack)
-    {
-        $this->parameterBag = $parameterBag;
-        $this->requestStack = $requestStack;
+    public function __construct(
+        private readonly ParameterBagInterface $parameterBag,
+        private readonly RequestStack $requestStack
+    ) {
     }
 
     /**
      * Get defined locales codes.
-     *
-     * @return array
      */
     public function getDefinedLocalesCodes(): array
     {
@@ -42,8 +30,6 @@ class TranslationLocaleProvider
 
     /**
      * Get default locale code.
-     *
-     * @return string
      */
     public function getDefaultLocaleCode(): string
     {
@@ -52,15 +38,13 @@ class TranslationLocaleProvider
 
     /**
      * Get default locale code.
-     *
-     * @return string
      */
     public function getCurrentRequestLocale(): string
     {
         $currentRequest = $this->requestStack->getCurrentRequest();
         if ($currentRequest) {
             $locale = $currentRequest->getLocale();
-            if (in_array($locale, $this->getDefinedLocalesCodes())) {
+            if (in_array($locale, $this->getDefinedLocalesCodes(), true)) {
                 return $locale;
             }
         }
@@ -70,8 +54,6 @@ class TranslationLocaleProvider
 
     /**
      * Has multiple locales codes?
-     *
-     * @return bool
      */
     public function hasMultipleLocalesCodes(): bool
     {
