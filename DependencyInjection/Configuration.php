@@ -16,7 +16,8 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        return (new TreeBuilder('entity_translation'))
+        $treeBuilder = new TreeBuilder('entity_translation');
+        $treeBuilder
             ->getRootNode()
             ->children()
                 ->arrayNode('locales')
@@ -34,5 +35,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
         ;
+
+        return $treeBuilder;
     }
 }
