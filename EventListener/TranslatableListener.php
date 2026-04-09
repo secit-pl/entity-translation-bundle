@@ -2,21 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SecIT\EntityTranslationBundle\EventSubscriber;
+namespace SecIT\EntityTranslationBundle\EventListener;
 
 use Doctrine\ORM\Event\PostLoadEventArgs;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use SecIT\EntityTranslationBundle\Translations\TranslatableInterface;
 use SecIT\EntityTranslationBundle\Translations\TranslationInterface;
 use SecIT\EntityTranslationBundle\Translations\TranslationLocaleProvider;
-use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
-use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 /**
- * Class TranslatableSubscriber.
+ * Class TranslatableListener.
  *
  * Based on Sylius translations engine.
  *
@@ -24,22 +22,13 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  *
  * @see https://github.com/Sylius/Sylius/blob/master/src/Sylius/Bundle/ResourceBundle/EventListener/ORMTranslatableListener.php
  */
-class TranslatableSubscriber implements EventSubscriber
+class TranslatableListener
 {
     private const TRANSLATABLE_ENTITY_CLASS_NAME = 'Translation';
 
     public function __construct(
         private readonly TranslationLocaleProvider $translationLocaleProvider,
     ) {
-    }
-
-    public function getSubscribedEvents()
-    {
-        return [
-            Events::loadClassMetadata,
-            Events::postLoad,
-            Events::prePersist,
-        ];
     }
 
     /**
