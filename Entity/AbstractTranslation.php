@@ -22,7 +22,7 @@ abstract class AbstractTranslation implements TranslationInterface
     /**
      * Dynamically mapped in TranslatableSubscriber.
      *
-     * @see \SecIT\EntityTranslationBundle\EventSubscriber\TranslatableSubscriber
+     * @see \SecIT\EntityTranslationBundle\EventListener\TranslatableListener
      */
     protected ?TranslatableInterface $translatable = null;
 
