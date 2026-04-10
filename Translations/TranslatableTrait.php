@@ -22,7 +22,7 @@ trait TranslatableTrait
      *
      * @see \SecIT\EntityTranslationBundle\EventSubscriber\TranslatableSubscriber
      */
-    protected ArrayCollection $translations;
+    protected Collection $translations;
 
     /**
      * @var array|TranslationInterface[]
