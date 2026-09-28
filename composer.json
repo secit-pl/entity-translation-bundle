@@ -21,8 +21,8 @@
         "symfony/intl": "^7.0 || ^8.0",
         "symfony/options-resolver": "^7.0 || ^8.0",
         "symfony/validator": "^7.0 || ^8.0",
-        "doctrine/doctrine-bundle": "^2.3",
-        "doctrine/orm": "^2.9"
+        "doctrine/doctrine-bundle": "^2.3 || ^3.0",
+        "doctrine/orm": "^2.9 || ^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "@stable"

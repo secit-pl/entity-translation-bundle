@@ -88,13 +88,18 @@ class TranslatableListener
     private function mapTranslatable(ClassMetadata $metadata): void
     {
         if (!$metadata->hasAssociation('translations')) {
+            $cascade = ['persist', 'remove'];
+            if (class_exists(ClassMetadataInfo::class)) {
+                $cascade[] = 'merge';
+            }
+
             $metadata->mapOneToMany([
                 'fieldName' => 'translations',
                 'targetEntity' => $metadata->name.'\\'.self::TRANSLATABLE_ENTITY_CLASS_NAME,
                 'mappedBy' => 'translatable',
-                'fetch' => ClassMetadataInfo::FETCH_EXTRA_LAZY,
+                'fetch' => ClassMetadata::FETCH_EXTRA_LAZY,
                 'indexBy' => 'locale',
-                'cascade' => ['persist', 'merge', 'remove'],
+                'cascade' => $cascade,
                 'orphanRemoval' => true,
             ]);
         }
